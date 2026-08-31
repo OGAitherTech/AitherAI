@@ -1,49 +1,64 @@
 import express from "express";
 import path from "path";
 import { fileURLToPath } from "url";
+import ollama from "ollama";
 
 const app = express();
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const port = process.env.PORT || 3000;
+const model = process.env.AITHER_MODEL || "llama3.2:3b";
 
-app.use(express.json({ limit: "1mb" }));
+app.use(express.json({ limit: "4mb" }));
 app.use(express.static(path.join(__dirname, "public")));
 
-// Aither AI local mode: no API key and no external AI service required.
-const replies = [
-  { test: /^(hi|hello|hey|yo)\b/i, reply: "Hey! 👋 I'm Aither AI. I'm running completely locally — no API required." },
-  { test: /who are you|what are you/i, reply: "I'm Aither AI! 🤖 A lightweight local AI assistant that works without an API key." },
-  { test: /joke/i, reply: "Why did the computer go to the doctor? Because it had a virus. 🦠😂" },
-  { test: /weather/i, reply: "I can't access live weather without an external service, but I can still chat with you locally! ☁️" },
-  { test: /help/i, reply: "Try asking me for a joke, a random challenge, a fun fact, or just start chatting! 🚀" }
-];
+const systemPrompt = `You are Aither AI, a friendly, helpful local AI assistant.
+You run through a local Ollama model, so never claim to use OpenAI, Anthropic, Gemini, or another remote AI API.
+Be concise by default, explain clearly, and use Markdown when useful.
+If you do not know something, say so instead of inventing facts.`;
 
-function localReply(text) {
-  const match = replies.find(item => item.test.test(text));
-  if (match) return match.reply;
-  const responses = [
-    "Interesting! 👀 Tell me more.",
-    "Okay, I'm listening! 😎",
-    "That's a good one. Let's think about it! 🧠",
-    "I'm Aither, running 100% locally — and I'm ready! ⚡",
-    "Hmm... you might be onto something. 🤔"
-  ];
-  return responses[Math.floor(Math.random() * responses.length)];
-}
-
-app.get("/api/health", (_req, res) => res.json({ ok: true, configured: true, mode: "local" }));
-
-app.post("/api/chat", (req, res) => {
+app.get("/api/health", async (_req, res) => {
   try {
-    const messages = Array.isArray(req.body.messages) ? req.body.messages : [];
-    const last = messages.filter(m => m && m.role === "user" && typeof m.content === "string").at(-1);
-    if (!last?.content.trim()) return res.status(400).json({ error: "No message supplied." });
-    res.json({ reply: localReply(last.content.trim()) });
+    const models = await ollama.list();
+    const installed = models.models?.some(m => m.name === model || m.name?.startsWith(`${model}:`));
+    res.json({ ok: true, mode: "local", model, installed, ollama: true });
+  } catch {
+    res.json({ ok: false, mode: "local", model, installed: false, ollama: false });
+  }
+});
+
+app.get("/api/models", async (_req, res) => {
+  try {
+    const result = await ollama.list();
+    res.json({ models: (result.models || []).map(m => m.name) });
+  } catch {
+    res.status(503).json({ error: "Ollama is not running. Install Ollama and start it first." });
+  }
+});
+
+app.post("/api/chat", async (req, res) => {
+  try {
+    const incoming = Array.isArray(req.body.messages) ? req.body.messages : [];
+    const messages = incoming
+      .filter(m => (m?.role === "user" || m?.role === "assistant") && typeof m.content === "string")
+      .slice(-30);
+
+    if (!messages.length) return res.status(400).json({ error: "No message supplied." });
+
+    const response = await ollama.chat({
+      model,
+      messages: [{ role: "system", content: systemPrompt }, ...messages],
+      stream: false,
+      options: { temperature: 0.7 }
+    });
+
+    res.json({ reply: response.message?.content || "I didn't generate a response.", model, local: true });
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Local AI request failed." });
+    console.error("Aither local model error:", error.message);
+    res.status(503).json({
+      error: `Aither could not reach the local model. Make sure Ollama is installed, running, and '${model}' is downloaded.`
+    });
   }
 });
 
 app.get("*", (_req, res) => res.sendFile(path.join(__dirname, "public", "index.html")));
-app.listen(port, () => console.log(`Aither AI local mode running on http://localhost:${port}`));
+app.listen(port, () => console.log(`Aither AI running locally on http://localhost:${port} using ${model}`));
