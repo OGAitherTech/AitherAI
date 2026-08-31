@@ -1,28 +1,28 @@
 # Aither AI 🤖
 
-Aither AI is a real conversational AI web app. The language model runs through **hosted inference**, so users do not install Ollama, download a model, or run the AI model on their own device.
+Aither AI is a real conversational AI web app powered by **hosted inference through OpenRouter**. The language model does not run on the user's device, and users do not need to install a local model.
 
 ## ✨ Features
 
 - 🧠 Real large-language-model chat
 - 🌐 Hosted AI inference through OpenRouter
 - 🆓 Defaults to OpenRouter's free-model router
-- 🔐 Provider credentials stay on the server and never enter the browser
+- 🔐 API credentials stay on the server
 - 💬 Conversation history in the browser
 - 🎤 Voice input when supported by the browser
 - 🔊 Optional voice responses
 - 📱 Responsive desktop and mobile interface
 - 🛡️ Server-side validation and error handling
-- 🚫 No Hugging Face dependency
-- 🚫 No Ollama dependency
-- 🚫 No OpenAI SDK dependency
+- 🚫 No Hugging Face
+- 🚫 No Ollama
+- 🚫 No OpenAI SDK
 
 ## 🏗️ Architecture
 
 ```text
 Your browser
     │
-    │ HTTPS /api/chat
+    │ /api/chat
     ▼
 Aither AI server
     │
@@ -42,7 +42,7 @@ The default model is:
 
 `openrouter/free`
 
-OpenRouter's Free Models Router automatically selects an available free model that matches the request. Free-model availability can change over time, and free models have lower rate limits than paid models.
+This is OpenRouter's free-model router. It can select an available free model automatically. Availability and rate limits can change over time.
 
 You can choose another OpenRouter model with the `AITHER_MODEL` environment variable.
 
@@ -54,7 +54,7 @@ Aither requires one private server environment variable:
 OPENROUTER_API_KEY=your_openrouter_key
 ```
 
-The person using the Aither website does **not** need an AI API key. The key belongs only on the server.
+The person using the Aither website does **not** need their own AI API key.
 
 **Never put `OPENROUTER_API_KEY` in `public/` or client-side JavaScript.**
 
@@ -65,29 +65,23 @@ npm install
 OPENROUTER_API_KEY=your_key npm start
 ```
 
-Then open:
+Then open `http://localhost:3000`.
 
-```text
-http://localhost:3000
-```
-
-For production, set `OPENROUTER_API_KEY` in your hosting provider's secret/environment-variable settings rather than committing it to GitHub.
+For production, configure `OPENROUTER_API_KEY` as a secret/environment variable on your hosting provider. Never commit it to GitHub.
 
 ## 🔄 Choose another model
 
 Set `AITHER_MODEL` before starting Aither. For example:
 
 ```bash
-AITHER_MODEL=openai/gpt-5 npm start
+AITHER_MODEL=openai/gpt-oss-120b npm start
 ```
 
-OpenRouter provides a unified API for many models and also supports automatic model fallbacks. Check the current model catalog before selecting a specific model.
+Check OpenRouter's current model catalog for available model IDs.
 
 ## 🔐 Privacy & security
 
-Aither's frontend does not contain the hosted provider token. Chat requests go from the Aither server to OpenRouter. The browser keeps its own conversation history in `localStorage`.
-
-OpenRouter's free-model router can route requests to different free models, and availability/rate limits can change. Do not send sensitive information unless you are comfortable with the policies of the selected model/provider.
+Aither's frontend does not contain the provider token. Chat requests go from the Aither server to OpenRouter. Browser conversation history is stored in `localStorage`.
 
 Never commit `.env`, access tokens, or other credentials to this repository.
 
@@ -109,23 +103,21 @@ AitherAI/
 │   ├── index.html
 │   ├── app.js
 │   └── style.css
-├── server.js        # Express server + OpenRouter hosted AI bridge
+├── server.js        # Express server + OpenRouter bridge
 ├── package.json
 └── README.md
 ```
 
 ## 📌 Version
 
-**2.2.0 — OpenRouter hosted AI**
+**2.3.0 — No-Hugging-Face hosted AI**
 
-### What's new in 2.2.0
+### What's new in 2.3.0
 
-- Replaced Hugging Face inference with OpenRouter
-- Removed all Hugging Face configuration and references
-- Added private `OPENROUTER_API_KEY` server configuration
-- Changed the default model to `openrouter/free`
-- Kept inference hosted instead of running on the user's device
-- Kept provider credentials out of the browser
-- Updated `/api/health` for OpenRouter
-- Improved hosted inference error handling
-- Updated architecture, setup, security, and privacy documentation
+- Removed Hugging Face completely from the server integration
+- Removed all `HF_TOKEN` configuration and references
+- Uses OpenRouter for hosted inference
+- Uses `openrouter/free` by default
+- Keeps the AI hosted rather than running locally
+- Keeps the provider credential server-side
+- Updated setup, architecture, security, and privacy documentation
