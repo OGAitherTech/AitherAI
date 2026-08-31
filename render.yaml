@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: aither-ai
+    runtime: node
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: OPENROUTER_API_KEY
+        sync: false
+      - key: AITHER_MODEL
+        value: openrouter/free
