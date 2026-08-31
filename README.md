@@ -1,18 +1,24 @@
 # Aither AI 🤖
 
-Aither AI is a lightweight AI-style assistant that runs in **local mode without an API key**.
+Aither AI is a lightweight, private AI-style assistant designed to run **without an external AI API or API key**.
 
-## Current features
+## ✨ Features
 
-- 💬 Chat interface
-- 💾 Local chat history using browser storage
+- 💬 Chat interface with persistent local history
+- 🧠 Built-in local response engine
+- 🧮 Basic arithmetic calculations
+- 😂 Built-in jokes
+- 💡 Built-in fun facts
+- 🎮 Random challenges
 - 🎤 Voice input when supported by the browser
-- 🔊 Voice responses when supported by the browser
-- ⚡ Local responses with no OpenAI API required
-- ❤️ Health endpoint at `/api/health`
-- 📱 Responsive interface for desktop and mobile
+- 🔊 Optional voice responses
+- 🌙 Dark/light theme toggle
+- ⌨️ Enter to send, Shift+Enter for a new line
+- 📱 Responsive desktop and mobile UI
+- 🔒 No OpenAI API key, `.env` file, or remote AI provider required
+- 🛟 Client-side fallback if the local server endpoint is unavailable
 
-## Run locally
+## 🚀 Run it
 
 ```bash
 npm install
@@ -21,23 +27,42 @@ npm start
 
 Then open `http://localhost:3000`.
 
-## No API keys
+## 🔐 Privacy
 
-Aither AI does **not** require an OpenAI API key or `.env` file in its current local mode.
+The current Aither AI engine does not send conversations to OpenAI or another external AI service. Chat history is stored in the browser's `localStorage`.
 
-## Project structure
+## 🧠 How the local AI works
+
+Aither currently uses a built-in JavaScript response engine rather than a large language model. It recognizes common requests, provides built-in content, and can calculate simple arithmetic locally.
+
+This keeps the project API-free while leaving room for a future **local open-source language model**.
+
+## 📁 Project structure
 
 ```text
 AitherAI/
 ├── public/
-│   ├── index.html
-│   ├── app.js
-│   └── style.css
-├── server.js
-├── package.json
-└── README.md
+│   ├── index.html   # App interface
+│   ├── app.js       # Chat UI, local features, voice, themes
+│   └── style.css    # Responsive styling
+├── server.js        # Local Express server and response endpoint
+├── package.json     # Project configuration
+└── README.md        # Documentation
 ```
 
-## Important
+## 📌 Current version
 
-The current local mode uses built-in response logic rather than a remote large language model. Future versions can add a local open-source model if desired, while keeping the project API-free.
+**1.2.0 — Local AI UI + response-engine upgrade**
+
+### What's new
+
+- Redesigned welcome screen and header
+- Dark/light mode
+- More local response types
+- Calculator support
+- More jokes, facts, and challenges
+- Better mobile layout
+- Enter-to-send keyboard behavior
+- Improved voice controls
+- Local fallback behavior
+- Updated privacy and setup documentation
