@@ -1,118 +1,110 @@
 # Aither AI 🤖
 
-Aither AI is a private AI assistant designed to run **locally with no external AI API or API key**.
-
-## 🧠 Real local AI
-
-Aither now uses **Ollama** to run an actual open-source language model on the same computer as the app. The server sends chat messages to Ollama's local runtime instead of OpenAI, Anthropic, Gemini, or another remote AI provider. Ollama provides a JavaScript library for local model integration. citeturn0search9
-
-The default model is `llama3.2:3b`, but you can change it with the `AITHER_MODEL` environment variable. The model must be installed in Ollama first.
+Aither AI is a real conversational AI web app. The language model runs through **hosted inference**, so users do not install Ollama, download a model, or run the AI model on their own device.
 
 ## ✨ Features
 
-- 🧠 Real local language-model chat
-- 🔒 No OpenAI/Anthropic/Gemini API key
-- 💻 Inference through local Ollama
-- 💬 Conversation history in browser storage
+- 🧠 Real large-language-model chat
+- 🌐 Hosted AI inference
+- 🔐 Provider credentials stay on the server and never enter the browser
+- 💬 Conversation history in the browser
 - 🎤 Voice input when supported by the browser
 - 🔊 Optional voice responses
-- 🌙 Dark/light theme
-- ⌨️ Enter to send, Shift+Enter for a new line
-- 📱 Responsive desktop and mobile UI
-- ❤️ Local health/status endpoint
-- 📋 Local model listing endpoint
-- ⚡ Configurable local model
+- 📱 Responsive desktop and mobile interface
+- 🛡️ Server-side validation and error handling
+- 🚫 No OpenAI, Anthropic, Gemini, or Ollama dependency
 
-## 🚀 Setup
+## 🏗️ Architecture
 
-### 1. Install Ollama
-
-Install Ollama for your computer, then make sure the Ollama app/service is running.
-
-### 2. Download a model
-
-For the default Aither configuration:
-
-```bash
-ollama pull llama3.2:3b
+```text
+Your browser
+    │
+    │ HTTPS /api/chat
+    ▼
+Aither AI server
+    │
+    │ private HF_TOKEN
+    ▼
+Hugging Face Inference Providers
+    │
+    ▼
+Hosted open-weight AI model
 ```
 
-### 3. Install Aither
+The browser never receives the provider credential. The Aither server makes the inference request, keeping the secret out of client-side JavaScript.
+
+## 🤖 Current model
+
+The default hosted model is:
+
+`openai/gpt-oss-120b:fastest`
+
+You can change it with the `AITHER_MODEL` environment variable. Hugging Face supports automatic provider selection with model policies such as `:fastest`, `:cheapest`, and `:preferred`.
+
+## 🔑 Server configuration
+
+Aither requires one private server environment variable:
+
+```bash
+HF_TOKEN=your_hugging_face_token
+```
+
+The token needs permission to make Inference Provider calls. **Never put `HF_TOKEN` in `public/` or client-side JavaScript.**
+
+The person using the Aither website does **not** need an AI API key.
+
+## 🚀 Run
 
 ```bash
 npm install
+HF_TOKEN=your_token npm start
 ```
 
-### 4. Start Aither
+Then open `http://localhost:3000`.
 
-```bash
-npm start
-```
+For production, set `HF_TOKEN` in your hosting provider's secret/environment-variable settings rather than committing it to GitHub.
 
-Then open:
+## 🔐 Privacy & security
 
-```text
-http://localhost:3000
-```
+Aither's frontend does not contain the hosted provider token. Chat requests go from the Aither server to the configured inference provider. The browser keeps its own conversation history in `localStorage`.
 
-## 🔧 Choose another model
+Never commit `.env`, access tokens, or other credentials to this repository.
 
-Set `AITHER_MODEL` before starting Aither. For example:
+## 📡 API endpoints
 
-```bash
-AITHER_MODEL=llama3.2:3b npm start
-```
+### `GET /api/health`
 
-Ollama supports many local models. For example, Llama 3 models can be run locally through Ollama. citeturn0search5
+Reports whether hosted AI is configured and identifies the configured model.
 
-## 🔐 Privacy
+### `POST /api/chat`
 
-Aither's chat request is sent to the **local Ollama service** running on the computer. Aither itself does not require a remote AI API key. Do not use Ollama cloud models if your goal is strictly offline/local inference; Ollama documents that its cloud models use remote compute. citeturn0search0
-
-## 🩺 Status endpoints
-
-Check whether the local model is available:
-
-```text
-GET /api/health
-```
-
-List models visible to Ollama:
-
-```text
-GET /api/models
-```
-
-Chat with Aither:
-
-```text
-POST /api/chat
-```
+Accepts a JSON body containing a `messages` array with `user` and `assistant` messages and returns the generated assistant response.
 
 ## 📁 Project structure
 
 ```text
 AitherAI/
 ├── public/
-│   ├── index.html   # App interface
-│   ├── app.js       # Chat UI, history, voice, themes
-│   └── style.css    # Responsive styling
-├── server.js        # Express server + Ollama local AI bridge
-├── package.json     # Project configuration
-└── README.md        # Documentation
+│   ├── index.html
+│   ├── app.js
+│   └── style.css
+├── server.js        # Express server + hosted AI bridge
+├── package.json
+└── README.md
 ```
 
 ## 📌 Version
 
-**2.0.0 — Real Local AI**
+**2.1.0 — Hosted AI rebuild**
 
-### What's new in 2.0.0
+### What's new in 2.1.0
 
-- Replaced the preset JavaScript response system with a real local language model
-- Added Ollama integration
-- Added configurable model selection through `AITHER_MODEL`
-- Added `/api/models` for local model discovery
-- Improved `/api/health` to report Ollama/model availability
-- Added clearer local-model error messages
-- Kept the project free of OpenAI/Anthropic/Gemini API dependencies
-- Updated setup and privacy documentation
+- Replaced the preset-response engine with real hosted LLM inference
+- Removed Ollama from the backend
+- Removed the Ollama npm dependency
+- Added server-side Hugging Face Inference Providers integration
+- Added private `HF_TOKEN` configuration
+- Added hosted-model configuration through `AITHER_MODEL`
+- Updated `/api/health` for hosted mode
+- Improved inference error handling
+- Updated architecture, setup, security, and privacy documentation
