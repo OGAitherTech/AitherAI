@@ -1,8 +1,10 @@
 # Aither AI 🤖
 
-Aither AI is a **real web-based AI chat app**. When the site is opened, users see the complete chat interface immediately — not a text document or README-style page.
+Aither AI is a **real web-based AI chat app**. When the deployed site is opened, users see the complete chat interface immediately — not a text document or README-style page.
 
 The browser talks to the Aither Node/Express server, which sends chat messages to OpenRouter for hosted AI inference.
+
+[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy)
 
 ## 💬 What opens when you visit Aither
 
@@ -41,6 +43,24 @@ The AI model is hosted remotely. Users do not install a model or Ollama, and the
 - ❌ Local AI model
 - ❌ OpenAI SDK
 
+## 🚀 Deploy the actual website
+
+The repository includes `render.yaml`, so the full Node/Express app can be deployed as a Render Web Service. Render supports deploying Express apps from GitHub and gives the service a public `onrender.com` URL. citeturn0search0turn0search1
+
+### Fastest setup
+
+1. Open the **Deploy to Render** button above.
+2. Connect/authorize your GitHub account if Render asks.
+3. Select `OGAitherTech/AitherAI`.
+4. Use the included `render.yaml` configuration.
+5. Set the private `OPENROUTER_API_KEY` environment variable.
+6. Deploy the service.
+7. Open the generated `https://...onrender.com` URL.
+
+Render can automatically redeploy the service when changes are pushed to the connected GitHub branch. citeturn0search5
+
+**Important:** GitHub's normal repository/file page is not the Aither website. GitHub Pages only serves static files and cannot run the Node/Express server needed by `/api/chat`; the full Aither app therefore needs the Web Service deployment. citeturn0search4turn0search1
+
 ## 🔑 Server configuration
 
 Set this private environment variable on the server/hosting provider:
@@ -56,16 +76,6 @@ AITHER_MODEL=openrouter/free
 ```
 
 Never put the key in `public/` or commit it to GitHub.
-
-## 🚀 Deploy
-
-A `render.yaml` file is included for deployment on Render.
-
-1. Create a Web Service from this repository.
-2. Let Render use the included `render.yaml`.
-3. Add `OPENROUTER_API_KEY` as a private environment variable.
-4. Deploy.
-5. Open the generated website URL — the actual Aither chat UI appears immediately.
 
 ## 💻 Development
 
@@ -114,5 +124,6 @@ AitherAI/
 - Added full sidebar/history structure
 - Added hosted-AI online indicator
 - Added mobile navigation controls
+- Added Render deployment configuration and instructions
 - Kept real hosted AI chat through OpenRouter
-- Updated README to document the actual first-open website experience
+- Updated README to document the actual first-open website and deployment path
