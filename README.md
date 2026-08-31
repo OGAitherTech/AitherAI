@@ -1,53 +1,61 @@
 # Aither AI 🤖
 
-Aither AI is a real web-based AI chat app with a polished responsive interface, browser chat history, direct hosted AI inference, and a working Settings panel.
+Aither AI is a real hosted AI chat app designed to work like a normal chat service: **users do not enter an API key**.
 
-## Version 3.4.3
+## Version 3.5.0
 
-### 📱 Mobile upgrade
-- Optimized the entire chat interface for phones and small screens
-- Added a mobile hamburger menu for the sidebar
-- Made the sidebar slide in and out on mobile
-- Improved touch-friendly button sizes
-- Added iPhone-safe-area support around the composer
-- Improved mobile message bubble sizing and wrapping
-- Kept the message box compatible with the mobile keyboard
-- Added a mobile-friendly Settings modal that opens from the bottom
-- Added support for very small screens
-- Added reduced-motion support for accessibility
+### ✨ AI chat upgrade
+- Removed the API-key prompt from the user interface
+- Chat requests now use Aither AI's `/api/chat` server endpoint
+- The provider credential is kept server-side in `OPENROUTER_API_KEY`
+- Users never need to paste an OpenRouter key into the website
+- Improved AI access status in Settings
+- Kept browser conversation history and mobile support
+- Kept Force Update and Clear Chats
 
-### ⚙️ Settings
-- Settings panel
-- Force Update button
-- API-key controls
-- Clear Chats control
+### 📱 Mobile
+- Responsive phone layout
+- Touch-friendly controls
+- Mobile sidebar
+- iPhone safe-area support
+- Mobile-friendly Settings sheet
+
+## 🔐 API key architecture
+
+The **user does not need an API key**.
+
+Aither AI's server uses the private `OPENROUTER_API_KEY` environment variable. The secret is never placed in `index.html`, `style.css`, or browser JavaScript.
+
+For a public GitHub Pages-only deployment, a private server cannot be bundled into the Pages site. The `/api/chat` endpoint therefore needs to be hosted by the Aither AI server (or another compatible backend). GitHub Pages by itself cannot securely provide hosted AI inference without exposing a credential or using an external backend.
+
+**Never commit an API key to GitHub.**
+
+## 🌐 Hosted AI
+
+Default model route:
+
+`openrouter/free`
+
+The model can be changed on the server with:
+
+`AITHER_MODEL`
+
+## ⚙️ Settings
+
+- Force Update
+- Clear Chats
+- AI access status
 - Current version display
 
-### 💬 Chat
-- Full Aither AI chat interface
-- Sidebar with saved conversations
-- New Chat controls
-- Loading and error states
-- 30 saved conversations
-- 12,000-character message limit
-
-## 🔑 API key
-
-A constant named `AITHER_API_KEY` is included near the top of the page script. If you put your OpenRouter key there, Aither AI will automatically use that key without asking the user for one.
-
-**Important:** a key placed in GitHub Pages source code is public. Anyone can inspect the page and copy the key. For a public repository, use a server-side secret/proxy if the key must remain private.
-
-If `AITHER_API_KEY` is empty, Aither AI can use a key entered through the key button and keep that fallback in `sessionStorage`.
-
-## 🌐 GitHub Pages
-
-The root `index.html` is the GitHub Pages entrypoint and loads `./style.css`.
-
-The Pages build connects directly to OpenRouter using the `openrouter/free` model route.
-
-It does not use Hugging Face, Ollama, a local model, or the OpenAI SDK.
-
 ## 📖 Changelog
+
+**3.5.0 — No-Key User Experience**
+- Removed the client-side API-key requirement
+- Added server endpoint usage for chat
+- Moved the provider secret to `OPENROUTER_API_KEY`
+- Fixed the server credential configuration
+- Updated Settings to show no-key AI access
+- Updated README
 
 **3.4.3 — Mobile Upgrade**
 - Optimized the complete interface for mobile
@@ -64,25 +72,4 @@ It does not use Hugging Face, Ollama, a local model, or the OpenAI SDK.
 - Added reliable close behavior
 - Added outside-click and Escape-key closing
 - Added explicit button types
-- Updated README
-
-**3.4.1 — Settings Fix**
-- Fixed Settings modal visibility
-- Improved mobile Settings layout
-- Updated README
-
-**3.4.0 — Settings & Force Update**
-- Added Settings panel
-- Added Force Update button
-- Added code-configured API key support
-- Added Clear Chats button
-- Added version display
-- Updated README
-
-**3.3.0 — Chat Polish Upgrade**
-- Improved startup and conversation handling
-- Improved mobile sidebar behavior
-- Improved composer and loading states
-- Improved error recovery
-- Improved API-key flow
 - Updated README
