@@ -1,70 +1,53 @@
 # Aither AI 🤖
 
-Aither AI is a real web-based AI chat app designed to open directly as Aither AI, with a complete chat interface and responsive styling.
+Aither AI is a real web-based AI chat app with a full responsive interface.
 
-## 🌐 GitHub Pages
+## Version 3.1.0
 
-The root `index.html` is the GitHub Pages entrypoint and now explicitly loads the root `style.css` with a relative path:
+### Interface upgrades
+- Full Aither AI sidebar and chat history
+- New Chat controls
+- Responsive mobile sidebar
+- Polished message bubbles and composer
+- Composer focus and hover effects
+- Improved Aither AI branding
+- Auto-growing message box
 
-```html
-<link rel="stylesheet" href="./style.css">
-```
+## GitHub Pages
 
-This makes the stylesheet work correctly when GitHub Pages serves the project from a repository subpath such as `/AitherAI/`.
+The root `index.html` is the GitHub Pages entrypoint and loads the root `style.css` using `./style.css`.
 
-## 💬 Interface
+## AI
 
-- 🤖 Aither AI branding
-- 🗂️ Sidebar with chat history
-- ➕ New chat
-- 👋 Aither AI welcome screen
-- 💬 Chat bubbles
-- 📝 Message composer
-- 🔑 OpenRouter key control
-- 📱 Mobile-responsive sidebar
-- ✨ Modern gradients, spacing, animations, and controls
-
-## 🧠 AI
-
-The GitHub Pages build connects directly to OpenRouter and uses `openrouter/free`.
+The Pages build connects directly to OpenRouter using `openrouter/free`.
 
 It does not use Hugging Face, Ollama, a local model, or the OpenAI SDK.
 
-## 🔑 API key
+## API key
 
-GitHub Pages cannot securely hide an API key. The Pages version asks for an OpenRouter key and keeps it only in the browser session. Never commit a key to the repository.
+GitHub Pages cannot securely hide an API key. The Pages app asks for an OpenRouter key and stores it only in the browser session. Never commit API keys to GitHub.
 
-## 🚀 Pages deployment
-
-The repository includes `.github/workflows/pages.yml`. Enable **Settings → Pages → GitHub Actions** and open the generated Pages URL.
-
-## 📁 Project
+## Project
 
 ```text
 AitherAI/
-├── index.html          # GitHub Pages entrypoint
-├── style.css           # GitHub Pages stylesheet
+├── index.html
+├── style.css
 ├── public/
-│   ├── index.html
-│   ├── app.js
-│   └── style.css
-├── .github/workflows/
-│   └── pages.yml
+├── .github/workflows/pages.yml
 ├── server.js
 ├── render.yaml
 ├── package.json
 └── README.md
 ```
 
-## 📌 Version
+## Changelog
 
-**2.9.1 — Connected GitHub Pages CSS**
+**3.1.0 — Aither AI UI Upgrade**
 
-### What's new in 2.9.1
-
-- Added the missing root `style.css` used by GitHub Pages
-- Confirmed root `index.html` uses `./style.css`
-- Added complete sidebar styling
-- Added responsive mobile sidebar styling
-- Added Aither AI branding and chat styling
-- Updated README with this CSS connection fix
+- Upgraded the responsive chat interface
+- Polished sidebar and history styling
+- Improved composer interactions
+- Added focus and hover states
+- Improved mobile behavior
+- Updated README for this release
