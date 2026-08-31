@@ -6,24 +6,35 @@ const app = express();
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const port = process.env.PORT || 3000;
 const model = process.env.AITHER_MODEL || "openrouter/free";
+// Keep the key in the hosting provider's secret/environment settings.
+// Never put the real key in GitHub source code or client-side JavaScript.
 const apiKey = process.env.OPENROUTER_API_KEY || "";
 
-app.use(express.json({ limit: "4mb" }));
-app.use(express.static(path.join(__dirname, "public")));
+app.disable("x-powered-by");
+app.use(express.json({ limit: "1mb" }));
+app.use(express.static(path.join(__dirname, "public"), { extensions: ["html"] }));
 
-const systemPrompt = `You are Aither AI, a friendly, capable general-purpose AI assistant. Answer naturally and clearly. Use Markdown when useful. Be honest when you are unsure.`;
+const systemPrompt = `You are Aither AI, a friendly, capable general-purpose AI assistant. Your name is Aither AI. Answer naturally and clearly. Use Markdown when useful. Be honest when you are unsure. Keep answers helpful and conversational.`;
 
 app.get("/api/health", (_req, res) => {
-  res.json({ ok: Boolean(apiKey), configured: Boolean(apiKey), mode: "hosted", provider: "OpenRouter", model });
+  res.json({
+    ok: Boolean(apiKey),
+    configured: Boolean(apiKey),
+    mode: "hosted",
+    provider: "OpenRouter",
+    model
+  });
 });
 
 app.post("/api/chat", async (req, res) => {
   if (!apiKey) return res.status(503).json({ error: "Aither AI's hosted service is not configured yet." });
 
   try {
-    const incoming = Array.isArray(req.body.messages) ? req.body.messages : [];
+    const incoming = Array.isArray(req.body?.messages) ? req.body.messages : [];
     const messages = incoming
       .filter(m => (m?.role === "user" || m?.role === "assistant") && typeof m.content === "string")
+      .map(m => ({ role: m.role, content: m.content.trim().slice(0, 12000) }))
+      .filter(m => m.content)
       .slice(-30);
 
     if (!messages.length) return res.status(400).json({ error: "No message supplied." });
@@ -43,10 +54,13 @@ app.post("/api/chat", async (req, res) => {
     });
 
     const data = await response.json();
-    if (!response.ok) return res.status(response.status).json({ error: data?.error?.message || "Hosted AI request failed." });
+    if (!response.ok) {
+      return res.status(response.status).json({ error: data?.error?.message || "Hosted AI request failed." });
+    }
 
-    const reply = data?.choices?.[0]?.message?.content;
+    const reply = data?.choices?.[0]?.message?.content?.trim();
     if (!reply) return res.status(502).json({ error: "The AI returned no response." });
+
     res.json({ reply, model: data.model || model, provider: "OpenRouter" });
   } catch (error) {
     console.error("Aither AI error:", error);
