@@ -1,3 +1,46 @@
 <!doctype html>
-<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#07070a"><title>Aither AI</title><link rel="stylesheet" href="/style.css"></head>
-<body><div class="app"><header><div class="brand"><div class="logo">A</div><div><b>Aither AI</b><span>Your AI. Your way.</span></div></div><button id="clear" class="icon">＋</button></header><main id="chat"></main><section id="welcome"><div class="orb">A</div><h1>Welcome to Aither AI</h1><p>Ask anything. Build anything. Let's get started.</p><div class="chips"><button>Give me a random challenge 🎮</button><button>Explain something cool 🧠</button><button>Tell me a joke 😂</button></div></section><form id="composer"><button type="button" id="mic" class="icon">🎤</button><textarea id="input" rows="1" placeholder="Message Aither AI..."></textarea><button class="send">➤</button></form></div><script src="/app.js"></script></body></html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#07070a">
+  <meta name="description" content="Aither AI — a fast, private AI-style assistant with no API key.">
+  <title>Aither AI</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class="app">
+    <header>
+      <div class="brand">
+        <div class="logo">A</div>
+        <div><b>Aither AI</b><span><i></i> Local • Private • No API</span></div>
+      </div>
+      <div class="actions">
+        <button id="theme" class="icon" title="Toggle theme" aria-label="Toggle theme">☀️</button>
+        <button id="clear" class="icon" title="New chat" aria-label="New chat">＋</button>
+      </div>
+    </header>
+
+    <main id="chat" aria-live="polite"></main>
+
+    <section id="welcome">
+      <div class="orb">A</div>
+      <h1>What can I help you with?</h1>
+      <p>Aither runs locally in this version. No API key. No cloud AI. Just open and chat.</p>
+      <div class="chips">
+        <button data-prompt="Give me a random challenge">🎮 Random challenge</button>
+        <button data-prompt="Explain something cool">🧠 Explain something cool</button>
+        <button data-prompt="Tell me a joke">😂 Tell me a joke</button>
+        <button data-prompt="Give me a fun fact">💡 Fun fact</button>
+      </div>
+    </section>
+
+    <form id="composer">
+      <button type="button" id="mic" class="icon" title="Voice input" aria-label="Voice input">🎤</button>
+      <textarea id="input" rows="1" autocomplete="off" placeholder="Message Aither AI..." aria-label="Message Aither AI"></textarea>
+      <button class="send" title="Send" aria-label="Send">➤</button>
+    </form>
+  </div>
+  <script src="/app.js"></script>
+</body>
+</html>
