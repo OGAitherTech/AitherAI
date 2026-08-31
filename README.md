@@ -1,21 +1,31 @@
 # Aither AI 🤖
 
-Aither AI is a real conversational AI web app powered by **hosted inference through OpenRouter**. The language model does not run on the user's device, and users do not need to install a local model.
+Aither AI is a real conversational AI web app powered by **hosted inference through OpenRouter**. The language model does not run on the user's device, and users do not install a local model.
 
-## ✨ Features
+## ✨ Chat features
 
 - 🧠 Real large-language-model chat
-- 🌐 Hosted AI inference through OpenRouter
-- 🆓 Defaults to OpenRouter's free-model router
-- 🔐 API credentials stay on the server
-- 💬 Conversation history in the browser
+- 💬 ChatGPT-style conversation bubbles
+- 📚 Multiple conversations with a chat history sidebar
+- ➕ New chat controls
+- 🏷️ Automatic chat titles from the first message
+- ⌨️ Enter to send, Shift+Enter for a new line
+- ⏳ Animated AI typing indicator
 - 🎤 Voice input when supported by the browser
 - 🔊 Optional voice responses
-- 📱 Responsive desktop and mobile interface
+- 🌙 Dark/light theme
+- 📱 Responsive desktop and mobile layout
+- 💾 Conversations saved in browser `localStorage`
+- 🆓 Defaults to OpenRouter's free-model router
+- 🔐 API credentials stay on the server
 - 🛡️ Server-side validation and error handling
-- 🚫 No Hugging Face
-- 🚫 No Ollama
-- 🚫 No OpenAI SDK
+
+## 🚫 What Aither does not use
+
+- ❌ Hugging Face
+- ❌ Ollama
+- ❌ A local AI model
+- ❌ OpenAI SDK
 
 ## 🏗️ Architecture
 
@@ -100,24 +110,29 @@ Accepts a JSON body containing a `messages` array with `user` and `assistant` me
 ```text
 AitherAI/
 ├── public/
-│   ├── index.html
-│   ├── app.js
-│   └── style.css
-├── server.js        # Express server + OpenRouter bridge
+│   ├── index.html     # Chat interface
+│   ├── app.js         # Chat, history, voice, and UI logic
+│   └── style.css      # Responsive chat design
+├── server.js          # Express + OpenRouter bridge
 ├── package.json
 └── README.md
 ```
 
 ## 📌 Version
 
-**2.3.0 — No-Hugging-Face hosted AI**
+**2.4.0 — Full AI Chat Experience**
 
-### What's new in 2.3.0
+### What's new in 2.4.0
 
-- Removed Hugging Face completely from the server integration
-- Removed all `HF_TOKEN` configuration and references
-- Uses OpenRouter for hosted inference
-- Uses `openrouter/free` by default
-- Keeps the AI hosted rather than running locally
-- Keeps the provider credential server-side
-- Updated setup, architecture, security, and privacy documentation
+- Rebuilt the frontend as a dedicated AI chat interface
+- Added ChatGPT-style message bubbles and sender labels
+- Added persistent multi-chat history
+- Added automatic conversation titles
+- Added new-chat controls
+- Added mobile chat sidebar
+- Added animated AI typing indicator
+- Improved composer and mobile responsiveness
+- Added Shift+Enter multiline messaging
+- Kept voice input and voice responses
+- Kept dark/light themes
+- Updated project structure and feature documentation
