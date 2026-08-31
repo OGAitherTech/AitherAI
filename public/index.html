@@ -3,43 +3,33 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-  <meta name="theme-color" content="#07070a">
-  <meta name="description" content="Aither AI — a fast, private AI-style assistant with no API key.">
+  <meta name="theme-color" content="#08090d">
+  <meta name="description" content="Aither AI — a hosted AI chat experience.">
   <title>Aither AI</title>
   <link rel="stylesheet" href="/style.css">
 </head>
 <body>
   <div class="app">
-    <header>
-      <div class="brand">
-        <div class="logo">A</div>
-        <div><b>Aither AI</b><span><i></i> Local • Private • No API</span></div>
-      </div>
-      <div class="actions">
-        <button id="theme" class="icon" title="Toggle theme" aria-label="Toggle theme">☀️</button>
-        <button id="clear" class="icon" title="New chat" aria-label="New chat">＋</button>
-      </div>
-    </header>
-
-    <main id="chat" aria-live="polite"></main>
-
-    <section id="welcome">
-      <div class="orb">A</div>
-      <h1>What can I help you with?</h1>
-      <p>Aither runs locally in this version. No API key. No cloud AI. Just open and chat.</p>
-      <div class="chips">
-        <button data-prompt="Give me a random challenge">🎮 Random challenge</button>
-        <button data-prompt="Explain something cool">🧠 Explain something cool</button>
-        <button data-prompt="Tell me a joke">😂 Tell me a joke</button>
-        <button data-prompt="Give me a fun fact">💡 Fun fact</button>
-      </div>
-    </section>
-
-    <form id="composer">
-      <button type="button" id="mic" class="icon" title="Voice input" aria-label="Voice input">🎤</button>
-      <textarea id="input" rows="1" autocomplete="off" placeholder="Message Aither AI..." aria-label="Message Aither AI"></textarea>
-      <button class="send" title="Send" aria-label="Send">➤</button>
-    </form>
+    <aside id="sidebar" class="sidebar">
+      <div class="side-top"><button id="closeSidebar" class="icon mobile-only">✕</button><div class="side-brand"><div class="logo">A</div><b>Aither AI</b></div><button id="newChatSide" class="new-chat">＋ New chat</button></div>
+      <div class="history-label">RECENT CHATS</div>
+      <div id="history" class="history"></div>
+      <div class="side-bottom"><span>🤖 Hosted AI</span><small>No local model</small></div>
+    </aside>
+    <div class="shell">
+      <header>
+        <button id="menu" class="icon mobile-only" aria-label="Open chats">☰</button>
+        <div class="brand"><div class="logo">A</div><div><b>Aither AI</b><span><i></i> Online • Hosted AI</span></div></div>
+        <div class="actions"><button id="theme" class="icon" title="Toggle theme">☀️</button><button id="clear" class="icon" title="New chat">＋</button></div>
+      </header>
+      <main id="chat" aria-live="polite"></main>
+      <section id="welcome">
+        <div class="orb">A</div><h1>What can I help you with?</h1><p>Ask Aither anything. Your chat is powered by a hosted AI model.</p>
+        <div class="chips"><button data-prompt="Explain something cool">🧠 Explain something</button><button data-prompt="Give me a random challenge">🎮 Challenge me</button><button data-prompt="Tell me a joke">😂 Tell me a joke</button><button data-prompt="Help me brainstorm a project">💡 Brainstorm</button></div>
+      </section>
+      <form id="composer"><button type="button" id="mic" class="icon" title="Voice input">🎤</button><textarea id="input" rows="1" autocomplete="off" placeholder="Message Aither AI..." aria-label="Message Aither AI"></textarea><button class="send" title="Send" aria-label="Send">➤</button></form>
+      <div class="composer-note">Aither can make mistakes. Check important information.</div>
+    </div>
   </div>
   <script src="/app.js"></script>
 </body>
