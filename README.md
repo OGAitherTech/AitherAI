@@ -1,40 +1,35 @@
 # Aither AI 🤖
 
-Aither AI is a **real web-based AI chat app**. When the deployed site is opened, users see the complete chat interface immediately — not a text document or README-style page.
+Aither AI is a **real web-based AI chat app** that can run directly from **GitHub Pages**. The first page is the full chat UI — not a text document.
 
-The browser talks to the Aither Node/Express server, which sends chat messages to OpenRouter for hosted AI inference.
+## 🌐 GitHub Pages version
 
-[![Deploy to Render](https://render.com/images/deploy-to-render-button.svg)](https://render.com/deploy)
+The repository now includes a GitHub Actions Pages workflow. It publishes everything in `public/` as the website.
 
-## 💬 What opens when you visit Aither
+After GitHub Pages is enabled, use the Pages URL shown under **Settings → Pages**.
 
-- 🤖 Aither AI header and online status
-- 💬 Full chat area
-- 👋 Welcome screen with starter prompts
+## 💬 What opens
+
+- 🤖 Aither AI chat interface
+- 💬 Real chat bubbles
+- 👋 Welcome screen and starter prompts
 - 📝 Message composer
 - ➤ Send button
+- 🔑 Connect OpenRouter key button
 - 🎤 Voice input
 - 📚 Conversation history
 - ➕ New chat
 - 🌙 Dark/light theme
 - ⏳ AI typing indicator
-- 📱 Responsive phone and desktop UI
+- 📱 Responsive phone/desktop UI
 
-## 🌐 Architecture
+## 🧠 AI connection
 
-```text
-Browser
-  ↓
-Aither AI web interface
-  ↓ POST /api/chat
-Aither Node/Express server
-  ↓
-OpenRouter
-  ↓
-Hosted AI model
-```
+GitHub Pages cannot run the Node/Express backend, so this Pages build sends chat requests directly to OpenRouter.
 
-The AI model is hosted remotely. Users do not install a model or Ollama, and the provider key is never placed in the browser.
+The OpenRouter key is **not stored in this repository**. When you click 🔑, Aither asks for your key and keeps it only in the current browser session (`sessionStorage`).
+
+This is the public/static approach requested. It is less secure than a server proxy because the browser must have access to the credential while making the request. Use a limited/revocable key and appropriate provider limits.
 
 ## 🚫 Not used
 
@@ -43,87 +38,80 @@ The AI model is hosted remotely. Users do not install a model or Ollama, and the
 - ❌ Local AI model
 - ❌ OpenAI SDK
 
-## 🚀 Deploy the actual website
-
-The repository includes `render.yaml`, so the full Node/Express app can be deployed as a Render Web Service. Render supports deploying Express apps from GitHub and gives the service a public `onrender.com` URL. citeturn0search0turn0search1
-
-### Fastest setup
-
-1. Open the **Deploy to Render** button above.
-2. Connect/authorize your GitHub account if Render asks.
-3. Select `OGAitherTech/AitherAI`.
-4. Use the included `render.yaml` configuration.
-5. Set the private `OPENROUTER_API_KEY` environment variable.
-6. Deploy the service.
-7. Open the generated `https://...onrender.com` URL.
-
-Render can automatically redeploy the service when changes are pushed to the connected GitHub branch. citeturn0search5
-
-**Important:** GitHub's normal repository/file page is not the Aither website. GitHub Pages only serves static files and cannot run the Node/Express server needed by `/api/chat`; the full Aither app therefore needs the Web Service deployment. citeturn0search4turn0search1
-
-## 🔑 Server configuration
-
-Set this private environment variable on the server/hosting provider:
+## 🚀 GitHub Pages deployment
 
 ```text
-OPENROUTER_API_KEY=your_openrouter_key
+.github/workflows/pages.yml
+          ↓
+      GitHub Actions
+          ↓
+   public/ → Pages
+          ↓
+   Aither AI website
+          ↓
+ OpenRouter hosted AI
 ```
 
-Optional:
+To enable it:
+
+1. Open the repository **Settings**.
+2. Open **Pages**.
+3. Under **Build and deployment**, choose **GitHub Actions**.
+4. The workflow deploys the site whenever `main` changes.
+5. Open the Pages URL shown by GitHub.
+
+## 🔑 Connecting AI
+
+Click **🔑** in the Aither header and paste your OpenRouter key.
+
+The key is held only for the current browser session. It is not written into `index.html`, `app.js`, GitHub, or the repository.
+
+Aither calls:
 
 ```text
-AITHER_MODEL=openrouter/free
+https://openrouter.ai/api/v1/chat/completions
 ```
 
-Never put the key in `public/` or commit it to GitHub.
+with the default model:
 
-## 💻 Development
-
-```bash
-npm install
-OPENROUTER_API_KEY=your_key npm start
+```text
+openrouter/free
 ```
 
-Open `http://localhost:3000`.
+## 🔐 Security warning
 
-## 🤖 Default model
+This GitHub-Pages-only version intentionally uses direct browser-to-provider requests. **Do not put a secret server key directly into the GitHub repository.** Anyone who can inspect the public webpage can inspect client-side requests.
 
-`openrouter/free`
-
-OpenRouter routes requests to an available free model. Availability and rate limits can change.
-
-## 📡 API
-
-`GET /api/health` — hosted AI status.
-
-`POST /api/chat` — sends the conversation to the hosted model and returns Aither's response.
+For a production app where one shared secret is protected, use the Node/Express server version with a server-side environment variable instead.
 
 ## 📁 Project
 
 ```text
 AitherAI/
 ├── public/
-│   ├── index.html       # Complete first-open chat page
-│   ├── app.js           # Chat application logic
+│   ├── index.html       # Complete first-open chat website
+│   ├── app.js           # Browser chat + OpenRouter connection
 │   └── style.css        # Chat styling
-├── server.js            # Hosted AI backend
-├── render.yaml          # Deployment configuration
+├── .github/workflows/
+│   └── pages.yml        # GitHub Pages deployment
+├── server.js            # Optional server deployment
+├── render.yaml          # Optional Render deployment
 ├── package.json
 └── README.md
 ```
 
 ## 📌 Version
 
-**2.6.0 — Complete First-Open Chat UI**
+**2.7.0 — GitHub Pages AI Chat**
 
-### What's new in 2.6.0
+### What's new in 2.7.0
 
-- Rebuilt `index.html` as the complete first-open Aither AI experience
-- Added a polished welcome screen and starter prompts
-- Added dedicated message composer and send controls
-- Added full sidebar/history structure
-- Added hosted-AI online indicator
-- Added mobile navigation controls
-- Added Render deployment configuration and instructions
-- Kept real hosted AI chat through OpenRouter
-- Updated README to document the actual first-open website and deployment path
+- Added GitHub Actions deployment to GitHub Pages
+- Made `public/` the actual Pages website
+- Added direct hosted AI chat through OpenRouter
+- Added 🔑 OpenRouter connection control
+- Kept API keys out of GitHub source files
+- Added session-only browser key storage
+- Added GitHub Pages setup instructions
+- Documented the security tradeoff of the public endpoint approach
+- Updated the README with the new GitHub Pages architecture
