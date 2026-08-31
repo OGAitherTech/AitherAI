@@ -6,19 +6,19 @@ const app = express();
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const port = process.env.PORT || 3000;
 const model = process.env.AITHER_MODEL || "openrouter/free";
-const apiKey = process.env.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;
+const apiKey = process.env.OPENROUTER_API_KEY || "";
 
 app.use(express.json({ limit: "4mb" }));
 app.use(express.static(path.join(__dirname, "public")));
 
-const systemPrompt = `You are Aither AI, a friendly, capable general-purpose AI assistant. Answer naturally and clearly. Use Markdown when useful. Be honest when you are unsure. You are a hosted AI assistant; never claim the model runs on the user's device.`;
+const systemPrompt = `You are Aither AI, a friendly, capable general-purpose AI assistant. Answer naturally and clearly. Use Markdown when useful. Be honest when you are unsure.`;
 
 app.get("/api/health", (_req, res) => {
   res.json({ ok: Boolean(apiKey), configured: Boolean(apiKey), mode: "hosted", provider: "OpenRouter", model });
 });
 
 app.post("/api/chat", async (req, res) => {
-  if (!apiKey) return res.status(503).json({ error: "Aither's server is missing OPENROUTER_API_KEY." });
+  if (!apiKey) return res.status(503).json({ error: "Aither AI's hosted service is not configured yet." });
 
   try {
     const incoming = Array.isArray(req.body.messages) ? req.body.messages : [];
@@ -35,7 +35,11 @@ app.post("/api/chat", async (req, res) => {
         "Content-Type": "application/json",
         "X-Title": "Aither AI"
       },
-      body: JSON.stringify({ model, messages: [{ role: "system", content: systemPrompt }, ...messages], temperature: 0.7 })
+      body: JSON.stringify({
+        model,
+        messages: [{ role: "system", content: systemPrompt }, ...messages],
+        temperature: 0.7
+      })
     });
 
     const data = await response.json();
