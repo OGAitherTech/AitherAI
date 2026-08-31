@@ -1,34 +1,49 @@
-import "dotenv/config";
 import express from "express";
-import OpenAI from "openai";
 import path from "path";
 import { fileURLToPath } from "url";
 
 const app = express();
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const port = process.env.PORT || 3000;
-const client = process.env.OPENAI_API_KEY ? new OpenAI({ apiKey: process.env.OPENAI_API_KEY }) : null;
 
 app.use(express.json({ limit: "1mb" }));
 app.use(express.static(path.join(__dirname, "public")));
 
-const SYSTEM = `You are Aither AI, a helpful, witty, energetic AI assistant. Be clear and friendly. You are the AI inside the Aither AI application. Do not claim to have abilities you do not have.`;
+// Aither AI local mode: no API key and no external AI service required.
+const replies = [
+  { test: /^(hi|hello|hey|yo)\b/i, reply: "Hey! 👋 I'm Aither AI. I'm running completely locally — no API required." },
+  { test: /who are you|what are you/i, reply: "I'm Aither AI! 🤖 A lightweight local AI assistant that works without an API key." },
+  { test: /joke/i, reply: "Why did the computer go to the doctor? Because it had a virus. 🦠😂" },
+  { test: /weather/i, reply: "I can't access live weather without an external service, but I can still chat with you locally! ☁️" },
+  { test: /help/i, reply: "Try asking me for a joke, a random challenge, a fun fact, or just start chatting! 🚀" }
+];
 
-app.get("/api/health", (_req, res) => res.json({ ok: true, configured: !!client }));
+function localReply(text) {
+  const match = replies.find(item => item.test.test(text));
+  if (match) return match.reply;
+  const responses = [
+    "Interesting! 👀 Tell me more.",
+    "Okay, I'm listening! 😎",
+    "That's a good one. Let's think about it! 🧠",
+    "I'm Aither, running 100% locally — and I'm ready! ⚡",
+    "Hmm... you might be onto something. 🤔"
+  ];
+  return responses[Math.floor(Math.random() * responses.length)];
+}
 
-app.post("/api/chat", async (req, res) => {
+app.get("/api/health", (_req, res) => res.json({ ok: true, configured: true, mode: "local" }));
+
+app.post("/api/chat", (req, res) => {
   try {
-    if (!client) return res.status(500).json({ error: "OPENAI_API_KEY is not configured on the server." });
     const messages = Array.isArray(req.body.messages) ? req.body.messages : [];
-    const safe = messages.filter(m => m && ["user", "assistant"].includes(m.role) && typeof m.content === "string").slice(-30).map(m => ({ role: m.role, content: m.content.slice(0, 12000) }));
-    if (!safe.length) return res.status(400).json({ error: "No message supplied." });
-    const response = await client.chat.completions.create({ model: "gpt-5-mini", messages: [{ role: "system", content: SYSTEM }, ...safe] });
-    res.json({ reply: response.choices?.[0]?.message?.content || "I didn't get a response." });
+    const last = messages.filter(m => m && m.role === "user" && typeof m.content === "string").at(-1);
+    if (!last?.content.trim()) return res.status(400).json({ error: "No message supplied." });
+    res.json({ reply: localReply(last.content.trim()) });
   } catch (error) {
     console.error(error);
-    res.status(500).json({ error: error?.message || "AI request failed." });
+    res.status(500).json({ error: "Local AI request failed." });
   }
 });
 
 app.get("*", (_req, res) => res.sendFile(path.join(__dirname, "public", "index.html")));
-app.listen(port, () => console.log(`Aither AI running on http://localhost:${port}`));
+app.listen(port, () => console.log(`Aither AI local mode running on http://localhost:${port}`));
