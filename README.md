@@ -2,21 +2,20 @@
 
 Aither AI is a real web-based AI chat app with a polished responsive interface, browser chat history, and direct hosted AI inference.
 
-## Version 3.2.0
+## Version 3.3.0
 
 ### Chat upgrades
-- Improved AI chat behavior
-- Better conversation state and chat switching
-- Saved chats can be reopened from the sidebar
-- New chats reliably reset the active conversation
-- Up to 30 browser-saved conversations
-- Better loading and error states
-- Send button is disabled while Aither AI is responding
-- Message input is limited to 12,000 characters
-- Improved API error messages
-- Better empty-response handling
-- Improved welcome copy and branding
-- API key can be updated from the key button
+- Improved Aither AI chat startup experience
+- Improved active conversation handling
+- Better mobile sidebar behavior
+- Cleaner conversation loading
+- Improved composer interaction and focus states
+- Better response loading state
+- Better error recovery after failed requests
+- Improved API-key update flow
+- Browser-only conversation history
+- Up to 30 saved conversations
+- 12,000-character message limit
 - README updated with every release change
 
 ## GitHub Pages
@@ -52,6 +51,15 @@ AitherAI/
 ```
 
 ## Changelog
+
+**3.3.0 — Chat Polish Upgrade**
+
+- Improved startup and conversation handling
+- Improved mobile sidebar behavior
+- Improved composer and loading states
+- Improved error recovery
+- Improved API-key flow
+- Updated README
 
 **3.2.0 — Chat Experience Upgrade**
 
