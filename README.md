@@ -1,47 +1,38 @@
 # Aither AI 🤖
 
-Aither AI is a **real web-based AI chat app**. It has a browser chat interface, a Node/Express backend, and hosted AI inference through OpenRouter.
+Aither AI is a **real web-based AI chat app**. When the site is opened, users see the complete chat interface immediately — not a text document or README-style page.
 
-It is not a text file or a preset-response demo. When deployed and configured, messages are sent to the Aither server and answered by a hosted language model.
+The browser talks to the Aither Node/Express server, which sends chat messages to OpenRouter for hosted AI inference.
 
-## 💬 The actual app
+## 💬 What opens when you visit Aither
 
-- 💬 AI chat bubbles
-- 🧠 Real hosted LLM responses
-- 📚 Multiple saved conversations
-- 🗂️ Chat history sidebar
+- 🤖 Aither AI header and online status
+- 💬 Full chat area
+- 👋 Welcome screen with starter prompts
+- 📝 Message composer
+- ➤ Send button
+- 🎤 Voice input
+- 📚 Conversation history
 - ➕ New chat
-- 🏷️ Automatic conversation titles
+- 🌙 Dark/light theme
 - ⏳ AI typing indicator
-- ⌨️ Enter to send / Shift+Enter for new lines
-- 🎤 Voice input when supported
-- 🔊 Voice responses
-- 🌙 Dark/light mode
-- 📱 Mobile and desktop layouts
-- 💾 Browser chat persistence
+- 📱 Responsive phone and desktop UI
 
-## 🌐 How it works
+## 🌐 Architecture
 
 ```text
-Phone / Computer browser
-          │
-          │ HTTPS
-          ▼
-     Aither AI website
-          │
-          │ POST /api/chat
-          ▼
-     Aither Node server
-          │
-          │ private API key
-          ▼
-       OpenRouter
-          │
-          ▼
-    Hosted AI model
+Browser
+  ↓
+Aither AI web interface
+  ↓ POST /api/chat
+Aither Node/Express server
+  ↓
+OpenRouter
+  ↓
+Hosted AI model
 ```
 
-The AI model is hosted remotely. Users do not install Ollama, download a model, or put an AI key into the browser.
+The AI model is hosted remotely. Users do not install a model or Ollama, and the provider key is never placed in the browser.
 
 ## 🚫 Not used
 
@@ -50,68 +41,62 @@ The AI model is hosted remotely. Users do not install Ollama, download a model, 
 - ❌ Local AI model
 - ❌ OpenAI SDK
 
-## 🔑 Server setup
+## 🔑 Server configuration
 
-Create an OpenRouter API key and add it to your hosting provider as a secret named:
+Set this private environment variable on the server/hosting provider:
 
 ```text
-OPENROUTER_API_KEY
+OPENROUTER_API_KEY=your_openrouter_key
 ```
 
-Optional model setting:
+Optional:
 
 ```text
 AITHER_MODEL=openrouter/free
 ```
 
-Never place the key in `public/` or commit it to GitHub.
+Never put the key in `public/` or commit it to GitHub.
 
-## 🚀 Deploy as an actual website
+## 🚀 Deploy
 
-A `render.yaml` deployment configuration is included.
+A `render.yaml` file is included for deployment on Render.
 
-On Render:
-
-1. Create a new Web Service from this GitHub repository.
-2. Render reads `render.yaml` automatically.
-3. Add your private `OPENROUTER_API_KEY` secret.
+1. Create a Web Service from this repository.
+2. Let Render use the included `render.yaml`.
+3. Add `OPENROUTER_API_KEY` as a private environment variable.
 4. Deploy.
-5. Open the generated website URL.
+5. Open the generated website URL — the actual Aither chat UI appears immediately.
 
-The result is a real Aither AI website that people can open in a browser and use as a chat app.
-
-## 💻 Run for development
+## 💻 Development
 
 ```bash
 npm install
 OPENROUTER_API_KEY=your_key npm start
 ```
 
-Then open `http://localhost:3000`.
+Open `http://localhost:3000`.
 
 ## 🤖 Default model
 
-Aither uses `openrouter/free` by default. OpenRouter can route requests to an available free model. Availability and rate limits can change.
+`openrouter/free`
 
-## 📡 Backend endpoints
+OpenRouter routes requests to an available free model. Availability and rate limits can change.
 
-### `GET /api/health`
+## 📡 API
 
-Returns whether hosted AI is configured and identifies the provider/model.
+`GET /api/health` — hosted AI status.
 
-### `POST /api/chat`
+`POST /api/chat` — sends the conversation to the hosted model and returns Aither's response.
 
-Sends the conversation to the configured hosted model and returns Aither's generated response.
-
-## 📁 Project structure
+## 📁 Project
 
 ```text
 AitherAI/
 ├── public/
-│   ├── index.html       # Actual browser chat UI
+│   ├── index.html       # Complete first-open chat page
 │   ├── app.js           # Chat application logic
-│   └── style.css        # Chat UI styling
-├── server.js            # Express + OpenRouter AI bridge
+│   └── style.css        # Chat styling
+├── server.js            # Hosted AI backend
 ├── render.yaml          # Deployment configuration
 ├── package.json
 └── README.md
@@ -119,14 +104,15 @@ AitherAI/
 
 ## 📌 Version
 
-**2.5.0 — Deployable AI Chat App**
+**2.6.0 — Complete First-Open Chat UI**
 
-### What's new in 2.5.0
+### What's new in 2.6.0
 
-- Added deployment configuration for Render
-- Documented Aither as a complete web application
-- Documented the browser → Aither server → OpenRouter architecture
-- Clarified that the AI model is hosted remotely
-- Added deployment instructions
-- Kept the real chat UI, history, voice, themes, and hosted inference
-- Updated the README with the complete application setup
+- Rebuilt `index.html` as the complete first-open Aither AI experience
+- Added a polished welcome screen and starter prompts
+- Added dedicated message composer and send controls
+- Added full sidebar/history structure
+- Added hosted-AI online indicator
+- Added mobile navigation controls
+- Kept real hosted AI chat through OpenRouter
+- Updated README to document the actual first-open website experience
