@@ -2,48 +2,45 @@
 
 Aither AI is a real hosted AI chat app designed to work like a normal chat service: **users do not enter an API key**.
 
-## Version 3.5.1
+## Version 3.5.2
 
-### ✨ Better hosted AI
-- Kept the API key completely out of the browser
-- Server reads the private `OPENROUTER_API_KEY` environment variable
-- Added safer request validation and message trimming
-- Added a lightweight 1 MB JSON request limit
-- Disabled Express's `X-Powered-By` header
-- Improved the Aither AI system prompt
-- Improved hosted-service error handling
-- Kept the `openrouter/free` route for low-cost/free-provider routing
+### ✨ AI chat fixes
+- Chat now safely reads JSON or plain error responses from the backend
+- Gives a useful message when GitHub Pages cannot reach `/api/chat`
+- Removed the confusing generic "invalid response" message
+- Keeps the private API key on the backend
+- Keeps the `openrouter/free` route
 
-### 📱 Mobile
-- Responsive phone layout
-- Touch-friendly controls
-- Mobile sidebar
-- iPhone safe-area support
-- Mobile-friendly Settings sheet
+### 📱 Mobile fixes
+- Added a real mobile sidebar backdrop
+- Added a dedicated sidebar close button
+- Tapping outside the sidebar closes it
+- The menu button now toggles the sidebar open/closed
+- New Chat and chat-history buttons close the sidebar automatically
+- Escape closes the sidebar
+- Improved mobile sidebar layering and touch behavior
 
 ### ⚙️ Settings
 - Force Update
 - Clear Chats
-- AI access status
+- Server/API-key status
 - Current version display
 
 ## 🔐 API key architecture
 
 The **user does not need an API key**.
 
-Aither AI's server uses the private `OPENROUTER_API_KEY` environment variable. The secret is never placed in `index.html`, `style.css`, or browser JavaScript.
-
-If you already have your OpenRouter key, put it into the **environment/secrets settings of the service hosting `server.js`** as:
+Aither AI's server uses the private `OPENROUTER_API_KEY` environment variable. The secret is never placed in browser JavaScript.
 
 ```text
 OPENROUTER_API_KEY=your_key_here
 ```
 
-Do **not** paste the real key into GitHub source code. I will not put a private API key into the repository because anything committed to a public GitHub repository can be exposed.
+Do **not** commit the real key to GitHub. A secret in a public GitHub Pages file is not hidden.
 
 ### GitHub Pages note
 
-GitHub Pages is static hosting. It cannot securely run `server.js` or hide a server secret by itself. The Pages frontend can point to a separately hosted Aither AI backend, but the backend must hold the key privately.
+GitHub Pages is static hosting and cannot securely run `server.js` or hide a server secret by itself. The Pages frontend uses `/api/chat`, so the Aither AI backend must be deployed separately (or behind a compatible proxy) and configured with your private key.
 
 ## 🌐 Hosted AI
 
@@ -56,6 +53,15 @@ The model can be changed on the server with:
 `AITHER_MODEL`
 
 ## 📖 Changelog
+
+**3.5.2 — AI & Mobile Reliability**
+- Fixed invalid-response handling
+- Added a clear backend-not-connected error
+- Added working mobile sidebar close behavior
+- Added sidebar backdrop
+- Added Escape-key closing
+- Updated mobile layering
+- Updated README
 
 **3.5.1 — Secure Hosted AI**
 - Hardened server-side API-key handling
