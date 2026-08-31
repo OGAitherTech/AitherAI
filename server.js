@@ -6,7 +6,7 @@ const app = express();
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const port = process.env.PORT || 3000;
 const model = process.env.AITHER_MODEL || "openrouter/free";
-const apiKey = process.env.OPENROUTER_API_KEY;
+const apiKey = process.env.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;
 
 app.use(express.json({ limit: "4mb" }));
 app.use(express.static(path.join(__dirname, "public")));
