@@ -1,117 +1,70 @@
 # Aither AI 🤖
 
-Aither AI is a **real web-based AI chat app** that can run directly from **GitHub Pages**. The first page is the full chat UI — not a text document.
+Aither AI is a real web-based AI chat app designed to open directly as Aither AI, with a complete chat interface and responsive styling.
 
-## 🌐 GitHub Pages version
+## 🌐 GitHub Pages
 
-The repository now includes a GitHub Actions Pages workflow. It publishes everything in `public/` as the website.
+The root `index.html` is the GitHub Pages entrypoint and now explicitly loads the root `style.css` with a relative path:
 
-After GitHub Pages is enabled, use the Pages URL shown under **Settings → Pages**.
+```html
+<link rel="stylesheet" href="./style.css">
+```
 
-## 💬 What opens
+This makes the stylesheet work correctly when GitHub Pages serves the project from a repository subpath such as `/AitherAI/`.
 
-- 🤖 Aither AI chat interface
-- 💬 Real chat bubbles
-- 👋 Welcome screen and starter prompts
-- 📝 Message composer
-- ➤ Send button
-- 🔑 Connect OpenRouter key button
-- 🎤 Voice input
-- 📚 Conversation history
+## 💬 Interface
+
+- 🤖 Aither AI branding
+- 🗂️ Sidebar with chat history
 - ➕ New chat
-- 🌙 Dark/light theme
-- ⏳ AI typing indicator
-- 📱 Responsive phone/desktop UI
+- 👋 Aither AI welcome screen
+- 💬 Chat bubbles
+- 📝 Message composer
+- 🔑 OpenRouter key control
+- 📱 Mobile-responsive sidebar
+- ✨ Modern gradients, spacing, animations, and controls
 
-## 🧠 AI connection
+## 🧠 AI
 
-GitHub Pages cannot run the Node/Express backend, so this Pages build sends chat requests directly to OpenRouter.
+The GitHub Pages build connects directly to OpenRouter and uses `openrouter/free`.
 
-The OpenRouter key is **not stored in this repository**. When you click 🔑, Aither asks for your key and keeps it only in the current browser session (`sessionStorage`).
+It does not use Hugging Face, Ollama, a local model, or the OpenAI SDK.
 
-This is the public/static approach requested. It is less secure than a server proxy because the browser must have access to the credential while making the request. Use a limited/revocable key and appropriate provider limits.
+## 🔑 API key
 
-## 🚫 Not used
+GitHub Pages cannot securely hide an API key. The Pages version asks for an OpenRouter key and keeps it only in the browser session. Never commit a key to the repository.
 
-- ❌ Hugging Face
-- ❌ Ollama
-- ❌ Local AI model
-- ❌ OpenAI SDK
+## 🚀 Pages deployment
 
-## 🚀 GitHub Pages deployment
-
-```text
-.github/workflows/pages.yml
-          ↓
-      GitHub Actions
-          ↓
-   public/ → Pages
-          ↓
-   Aither AI website
-          ↓
- OpenRouter hosted AI
-```
-
-To enable it:
-
-1. Open the repository **Settings**.
-2. Open **Pages**.
-3. Under **Build and deployment**, choose **GitHub Actions**.
-4. The workflow deploys the site whenever `main` changes.
-5. Open the Pages URL shown by GitHub.
-
-## 🔑 Connecting AI
-
-Click **🔑** in the Aither header and paste your OpenRouter key.
-
-The key is held only for the current browser session. It is not written into `index.html`, `app.js`, GitHub, or the repository.
-
-Aither calls:
-
-```text
-https://openrouter.ai/api/v1/chat/completions
-```
-
-with the default model:
-
-```text
-openrouter/free
-```
-
-## 🔐 Security warning
-
-This GitHub-Pages-only version intentionally uses direct browser-to-provider requests. **Do not put a secret server key directly into the GitHub repository.** Anyone who can inspect the public webpage can inspect client-side requests.
-
-For a production app where one shared secret is protected, use the Node/Express server version with a server-side environment variable instead.
+The repository includes `.github/workflows/pages.yml`. Enable **Settings → Pages → GitHub Actions** and open the generated Pages URL.
 
 ## 📁 Project
 
 ```text
 AitherAI/
+├── index.html          # GitHub Pages entrypoint
+├── style.css           # GitHub Pages stylesheet
 ├── public/
-│   ├── index.html       # Complete first-open chat website
-│   ├── app.js           # Browser chat + OpenRouter connection
-│   └── style.css        # Chat styling
+│   ├── index.html
+│   ├── app.js
+│   └── style.css
 ├── .github/workflows/
-│   └── pages.yml        # GitHub Pages deployment
-├── server.js            # Optional server deployment
-├── render.yaml          # Optional Render deployment
+│   └── pages.yml
+├── server.js
+├── render.yaml
 ├── package.json
 └── README.md
 ```
 
 ## 📌 Version
 
-**2.7.0 — GitHub Pages AI Chat**
+**2.9.1 — Connected GitHub Pages CSS**
 
-### What's new in 2.7.0
+### What's new in 2.9.1
 
-- Added GitHub Actions deployment to GitHub Pages
-- Made `public/` the actual Pages website
-- Added direct hosted AI chat through OpenRouter
-- Added 🔑 OpenRouter connection control
-- Kept API keys out of GitHub source files
-- Added session-only browser key storage
-- Added GitHub Pages setup instructions
-- Documented the security tradeoff of the public endpoint approach
-- Updated the README with the new GitHub Pages architecture
+- Added the missing root `style.css` used by GitHub Pages
+- Confirmed root `index.html` uses `./style.css`
+- Added complete sidebar styling
+- Added responsive mobile sidebar styling
+- Added Aither AI branding and chat styling
+- Updated README with this CSS connection fix
