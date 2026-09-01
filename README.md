@@ -2,26 +2,33 @@
 
 Aither AI is a real browser-based AI chat app. **Users do not enter an API key, install Ollama, or configure a cloud AI provider.** The AI model runs directly in the browser with WebGPU.
 
-## Version 4.0.0
+## Version 4.0.1
 
-### 🤖 Browser AI rebuild
-- Replaced the hosted `/api/chat` requirement with in-browser AI inference
-- Added WebLLM through an ESM CDN import
-- Uses `Llama-3.2-1B-Instruct-q4f16_1-MLC` as the default model
-- AI inference runs on the user's device through WebGPU
+### 📥 AI model download progress
+- Added a dedicated model download panel on first launch
+- Shows live download percentage
+- Shows a visual progress bar
+- Shows the current download/loading status
+- Estimates how much time is left while enough progress data is available
+- Shows `Complete` when the model finishes loading
+- Automatically hides the download panel shortly after the AI becomes ready
+- Keeps the chat disabled until the model is ready
+
+### 🤖 Browser AI
+- Uses WebLLM with `Llama-3.2-1B-Instruct-q4f16_1-MLC`
+- Runs AI inference directly on the user's device through WebGPU
 - No backend is required for chat
 - No API key is requested or stored
-- Added model loading progress
-- Added a clear WebGPU compatibility message
-- Conversations remain in browser `localStorage`
+- No Hugging Face, Ollama, or OpenAI API dependency
 
 ### 📱 Mobile
-- Keeps the mobile sidebar
+- Mobile sidebar
 - Dedicated sidebar close button
 - Tap-outside-to-close backdrop
 - Touch-friendly controls
 - Mobile-friendly Settings sheet
-- iPhone safe-area support from the existing responsive stylesheet
+- iPhone safe-area support
+- Responsive download panel
 
 ### ⚙️ Settings
 - Force Update
@@ -31,11 +38,9 @@ Aither AI is a real browser-based AI chat app. **Users do not enter an API key, 
 
 ## 🔐 No API key
 
-Aither AI 4.0.0 does **not** ask the user for an API key.
+Aither AI does **not** ask users for an API key. The model runs locally in the browser using WebGPU.
 
-There is no OpenAI API dependency, no Ollama installation, and no hosted inference key in the frontend.
-
-## 🧠 How the browser AI works
+## 🧠 How it works
 
 ```text
 GitHub Pages
@@ -56,27 +61,21 @@ Llama 3.2 1B model
 Your browser / device
 ```
 
-The model is downloaded the first time it is used and can be cached by the browser. Because inference happens on-device, performance depends on the phone or computer's WebGPU hardware.
-
-WebLLM is specifically designed for in-browser inference without server support and uses WebGPU acceleration. citeturn0search5
+The model is downloaded the first time it is needed. Aither AI displays the download percentage and an estimated time remaining while it loads. The browser may cache the model for later use.
 
 ## 🌐 GitHub Pages
 
-Aither AI 4.0.0 is designed to work as a static GitHub Pages site. There is no `/api/chat` endpoint required for normal AI chat.
+Aither AI is designed to work as a static GitHub Pages site. Normal AI chat does not require `/api/chat` or a backend server.
 
-The page imports WebLLM from an ESM CDN, so the first visit needs an internet connection to load the runtime and model files. After the model is cached, later use can require less downloading depending on browser storage.
+The WebLLM runtime and model files are fetched when needed, so the first launch requires an internet connection. After caching, later launches may require little or no model downloading depending on browser storage.
 
 ## 🌍 Browser support
 
-WebGPU is required for the browser AI. Current WebLLM documentation lists Chrome/Edge 113+ and Safari 18+ as supported browser families. citeturn0search7
-
-On iPhone, use a recent Safari/iOS version with WebGPU support. Older devices or browsers may not have enough GPU memory for the selected model.
+WebGPU is required. Use a recent browser/device with WebGPU support. On iPhone, use a recent Safari/iOS version. Older devices may not have enough GPU memory for the selected model.
 
 ## ⚠️ First launch
 
-The first launch can take a while because the AI model has to download and initialize. Aither AI now shows loading progress instead of looking like the chat is broken.
-
-The model is much smaller than many cloud-sized LLMs, but it still requires device memory and GPU resources.
+The first launch can take a while because the AI model must download and initialize. **Do not close or refresh the page while the download is running.** The progress bar shows how far the model has loaded and estimates the remaining time when enough data is available.
 
 ## 🚫 Dependencies intentionally not used
 
@@ -86,9 +85,20 @@ The model is much smaller than many cloud-sized LLMs, but it still requires devi
 - 🚫 Anthropic API
 - 🚫 Gemini API
 - 🚫 User API keys
-- 🚫 A required backend server
+- 🚫 Required backend server
 
 ## 📖 Changelog
+
+**4.0.1 — Model Download Progress**
+- Added download percentage
+- Added visual download progress bar
+- Added estimated time remaining
+- Added loading status text
+- Added completion state
+- Automatically hides the download panel after initialization
+- Keeps chat disabled until the AI is ready
+- Updated mobile download styling
+- Updated README
 
 **4.0.0 — Browser AI Rebuild**
 - Rebuilt Aither AI around in-browser WebLLM inference
