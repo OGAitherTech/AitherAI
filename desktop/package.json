@@ -1,0 +1,22 @@
+{
+  "name": "aither-ai-desktop",
+  "version": "4.1.0",
+  "description": "Aither AI desktop app",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder"
+  },
+  "devDependencies": {
+    "electron": "latest",
+    "electron-builder": "latest"
+  },
+  "build": {
+    "appId": "com.ogaithertech.aitherai",
+    "productName": "Aither AI",
+    "files": ["main.js", "preload.js", "renderer.html"],
+    "win": { "target": "nsis" },
+    "mac": { "target": "dmg" },
+    "linux": { "target": "AppImage" }
+  }
+}
