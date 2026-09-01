@@ -1,58 +1,106 @@
 # Aither AI 🤖
 
-Aither AI is a real hosted AI chat app designed to work like a normal chat service: **users do not enter an API key**.
+Aither AI is a real browser-based AI chat app. **Users do not enter an API key, install Ollama, or configure a cloud AI provider.** The AI model runs directly in the browser with WebGPU.
 
-## Version 3.5.2
+## Version 4.0.0
 
-### ✨ AI chat fixes
-- Chat now safely reads JSON or plain error responses from the backend
-- Gives a useful message when GitHub Pages cannot reach `/api/chat`
-- Removed the confusing generic "invalid response" message
-- Keeps the private API key on the backend
-- Keeps the `openrouter/free` route
+### 🤖 Browser AI rebuild
+- Replaced the hosted `/api/chat` requirement with in-browser AI inference
+- Added WebLLM through an ESM CDN import
+- Uses `Llama-3.2-1B-Instruct-q4f16_1-MLC` as the default model
+- AI inference runs on the user's device through WebGPU
+- No backend is required for chat
+- No API key is requested or stored
+- Added model loading progress
+- Added a clear WebGPU compatibility message
+- Conversations remain in browser `localStorage`
 
-### 📱 Mobile fixes
-- Added a real mobile sidebar backdrop
-- Added a dedicated sidebar close button
-- Tapping outside the sidebar closes it
-- The menu button now toggles the sidebar open/closed
-- New Chat and chat-history buttons close the sidebar automatically
-- Escape closes the sidebar
-- Improved mobile sidebar layering and touch behavior
+### 📱 Mobile
+- Keeps the mobile sidebar
+- Dedicated sidebar close button
+- Tap-outside-to-close backdrop
+- Touch-friendly controls
+- Mobile-friendly Settings sheet
+- iPhone safe-area support from the existing responsive stylesheet
 
 ### ⚙️ Settings
 - Force Update
 - Clear Chats
-- Server/API-key status
+- Browser AI status
 - Current version display
 
-## 🔐 API key architecture
+## 🔐 No API key
 
-The **user does not need an API key**.
+Aither AI 4.0.0 does **not** ask the user for an API key.
 
-Aither AI's server uses the private `OPENROUTER_API_KEY` environment variable. The secret is never placed in browser JavaScript.
+There is no OpenAI API dependency, no Ollama installation, and no hosted inference key in the frontend.
+
+## 🧠 How the browser AI works
 
 ```text
-OPENROUTER_API_KEY=your_key_here
+GitHub Pages
+     │
+     ▼
+Aither AI web app
+     │
+     ▼
+WebLLM
+     │
+     ▼
+WebGPU
+     │
+     ▼
+Llama 3.2 1B model
+     │
+     ▼
+Your browser / device
 ```
 
-Do **not** commit the real key to GitHub. A secret in a public GitHub Pages file is not hidden.
+The model is downloaded the first time it is used and can be cached by the browser. Because inference happens on-device, performance depends on the phone or computer's WebGPU hardware.
 
-### GitHub Pages note
+WebLLM is specifically designed for in-browser inference without server support and uses WebGPU acceleration. citeturn0search5
 
-GitHub Pages is static hosting and cannot securely run `server.js` or hide a server secret by itself. The Pages frontend uses `/api/chat`, so the Aither AI backend must be deployed separately (or behind a compatible proxy) and configured with your private key.
+## 🌐 GitHub Pages
 
-## 🌐 Hosted AI
+Aither AI 4.0.0 is designed to work as a static GitHub Pages site. There is no `/api/chat` endpoint required for normal AI chat.
 
-Default model route:
+The page imports WebLLM from an ESM CDN, so the first visit needs an internet connection to load the runtime and model files. After the model is cached, later use can require less downloading depending on browser storage.
 
-`openrouter/free`
+## 🌍 Browser support
 
-The model can be changed on the server with:
+WebGPU is required for the browser AI. Current WebLLM documentation lists Chrome/Edge 113+ and Safari 18+ as supported browser families. citeturn0search7
 
-`AITHER_MODEL`
+On iPhone, use a recent Safari/iOS version with WebGPU support. Older devices or browsers may not have enough GPU memory for the selected model.
+
+## ⚠️ First launch
+
+The first launch can take a while because the AI model has to download and initialize. Aither AI now shows loading progress instead of looking like the chat is broken.
+
+The model is much smaller than many cloud-sized LLMs, but it still requires device memory and GPU resources.
+
+## 🚫 Dependencies intentionally not used
+
+- 🚫 Hugging Face Inference API
+- 🚫 Ollama
+- 🚫 OpenAI API
+- 🚫 Anthropic API
+- 🚫 Gemini API
+- 🚫 User API keys
+- 🚫 A required backend server
 
 ## 📖 Changelog
+
+**4.0.0 — Browser AI Rebuild**
+- Rebuilt Aither AI around in-browser WebLLM inference
+- Removed the `/api/chat` requirement from the frontend
+- Removed the user API-key flow
+- Added WebGPU model initialization
+- Added model download/loading progress
+- Added WebGPU compatibility handling
+- Kept local conversation history
+- Kept mobile sidebar and Settings
+- Kept Force Update
+- Updated README
 
 **3.5.2 — AI & Mobile Reliability**
 - Fixed invalid-response handling
@@ -76,7 +124,6 @@ The model can be changed on the server with:
 - Removed the client-side API-key requirement
 - Added server endpoint usage for chat
 - Moved the provider secret to `OPENROUTER_API_KEY`
-- Fixed the server credential configuration
 - Updated Settings to show no-key AI access
 - Updated README
 
