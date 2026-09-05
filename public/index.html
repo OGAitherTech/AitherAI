@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#0b0d12">
-  <meta name="description" content="Aither AI — fast, friendly hosted AI chat.">
+  <meta name="description" content="Aither AI — fast, friendly AI chat powered by AitherBackend.">
   <title>Aither AI</title>
   <link rel="stylesheet" href="./style.css">
 </head>
@@ -12,63 +12,37 @@
   <div class="app">
     <div id="backdrop" class="backdrop" hidden></div>
     <aside id="sidebar" class="sidebar">
-      <div class="side-top">
-        <div class="side-brand"><div class="logo">A</div><div><b>Aither AI</b><small>AI Chat</small></div></div>
-        <button id="closeSidebar" class="icon mobile-only" type="button" aria-label="Close chats">×</button>
-      </div>
+      <div class="side-top"><div class="side-brand"><div class="logo">A</div><div><b>Aither AI</b><small>AitherBackend</small></div></div><button id="closeSidebar" class="icon mobile-only" type="button" aria-label="Close chats">×</button></div>
       <button id="newChatSide" class="new-chat" type="button">＋ New chat</button>
-      <div class="history-label">CHATS</div>
-      <div id="history" class="history"></div>
-      <div class="side-bottom">
-        <button id="settings" class="history-item" type="button">⚙ Settings</button>
-        <small>Aither AI • Hosted backend</small>
-      </div>
+      <div class="history-label">CHATS</div><div id="history" class="history"></div>
+      <div class="side-bottom"><button id="settings" class="history-item" type="button">⚙ Settings</button><small>Aither AI 6.0</small></div>
     </aside>
-
     <div class="shell">
       <header>
         <button id="menu" class="icon mobile-only" type="button" aria-label="Open chats">☰</button>
         <div class="brand"><div class="logo">A</div><div><b>Aither AI</b><span><i id="statusDot"></i><span id="headerStatus">Connecting…</span></span></div></div>
-        <div class="actions">
-          <button id="theme" class="icon" type="button" title="Toggle theme" aria-label="Toggle theme">☀️</button>
-          <button id="newChat" class="new-top" type="button">＋ New chat</button>
-        </div>
+        <div class="actions"><button id="theme" class="icon" type="button" title="Toggle theme" aria-label="Toggle theme">☀️</button><button id="newChat" class="new-top" type="button">＋ New chat</button></div>
       </header>
-
       <main id="chat" aria-live="polite"></main>
       <section id="welcome">
-        <div class="orb">A</div>
-        <h1>What can I help you with?</h1>
-        <p>Real Aither AI chat, powered by your hosted backend.</p>
-        <div id="connectionCard" class="connection-card"><span class="status-dot"></span><span id="connectionText">Checking Aither backend…</span></div>
-        <div class="chips">
-          <button type="button" data-prompt="Explain something cool">🧠 Explain something</button>
-          <button type="button" data-prompt="Give me a random challenge">🎮 Challenge me</button>
-          <button type="button" data-prompt="Tell me a joke">😂 Tell me a joke</button>
-          <button type="button" data-prompt="Help me brainstorm a project">💡 Brainstorm</button>
-        </div>
+        <div class="orb">A</div><h1>What can I help you with?</h1><p>Real AI conversations powered by AitherBackend.</p>
+        <div id="connectionCard" class="connection-card"><span class="status-dot"></span><span id="connectionText">Checking AitherBackend…</span></div>
+        <div class="chips"><button type="button" data-prompt="Explain something cool">🧠 Explain something</button><button type="button" data-prompt="Give me a random challenge">🎮 Challenge me</button><button type="button" data-prompt="Tell me a joke">😂 Tell me a joke</button><button type="button" data-prompt="Help me brainstorm a project">💡 Brainstorm</button></div>
       </section>
-
       <form id="composer">
-        <div class="composer-box">
-          <textarea id="input" rows="1" maxlength="12000" autocomplete="off" placeholder="Message Aither AI…" aria-label="Message Aither AI"></textarea>
-          <div class="composer-actions"><button type="button" id="mic" class="icon" title="Voice input" aria-label="Voice input">🎤</button><button type="submit" id="send" class="send" title="Send" aria-label="Send">➤</button></div>
-        </div>
+        <div class="composer-box"><textarea id="input" rows="1" maxlength="12000" autocomplete="off" placeholder="Message Aither AI…" aria-label="Message Aither AI"></textarea><div class="composer-actions"><button type="button" id="mic" class="icon" title="Voice input" aria-label="Voice input">🎤</button><button type="button" id="stop" class="stop" title="Stop generating" aria-label="Stop generating" hidden>■</button><button type="submit" id="send" class="send" title="Send" aria-label="Send">➤</button></div></div>
       </form>
-      <div class="composer-note">Your conversations stay in this browser. API keys are kept on the hosted backend, never in this site.</div>
+      <div class="composer-note">Powered by AitherBackend. Provider credentials stay on the backend and are never shipped to this site.</div>
     </div>
   </div>
-
-  <div id="settingsModal" class="modal" hidden role="dialog" aria-modal="true" aria-labelledby="settingsTitle">
-    <div class="modal-card">
-      <div class="modal-head"><div><h2 id="settingsTitle">Settings</h2><p>Aither AI controls</p></div><button id="closeSettings" class="icon" type="button" aria-label="Close settings">×</button></div>
-      <div class="setting"><div><b>Force update</b><small>Reload the newest Aither AI files and bypass the browser cache.</small></div><button id="forceUpdate" class="setting-btn" type="button">Update</button></div>
-      <div class="setting"><div><b>Backend URL</b><small>Use the hosted Aither AI backend. Leave blank when this app is hosted by the backend itself.</small></div><input id="backendUrl" class="setting-input" inputmode="url" placeholder="https://your-backend.example.com"></div>
-      <div class="setting"><div><b>Connection</b><small id="settingsStatus">Checking…</small></div><span id="settingsPill" class="ready-pill">Checking</span></div>
-      <div class="setting"><div><b>Clear chats</b><small>Delete conversations saved on this device.</small></div><button id="clearChats" class="setting-btn danger" type="button">Clear</button></div>
-      <div class="version">Aither AI 5.0</div>
-    </div>
-  </div>
+  <div id="settingsModal" class="modal" hidden role="dialog" aria-modal="true" aria-labelledby="settingsTitle"><div class="modal-card">
+    <div class="modal-head"><div><h2 id="settingsTitle">Settings</h2><p>Aither AI controls</p></div><button id="closeSettings" class="icon" type="button" aria-label="Close settings">×</button></div>
+    <div class="setting"><div><b>Force update</b><small>Reload the newest Aither AI files and bypass the browser cache.</small></div><button id="forceUpdate" class="setting-btn" type="button">Update</button></div>
+    <div class="setting"><div><b>AitherBackend URL</b><small>Point Aither AI at your deployed AitherBackend instance.</small></div><input id="backendUrl" class="setting-input" inputmode="url" placeholder="https://aither-backend.onrender.com"></div>
+    <div class="setting"><div><b>Connection</b><small id="settingsStatus">Checking…</small></div><span id="settingsPill" class="ready-pill">Checking</span></div>
+    <div class="setting"><div><b>Clear chats</b><small>Delete conversations saved on this device.</small></div><button id="clearChats" class="setting-btn danger" type="button">Clear</button></div>
+    <div class="version">Aither AI 6.0 • AitherBackend 2.2</div>
+  </div></div>
   <script src="./app.js"></script>
 </body>
 </html>
